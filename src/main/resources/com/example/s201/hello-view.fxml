@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.gluonhq.maps.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import org.controlsfx.control.WorldMapView?>
-<?import com.gluonhq.maps.MapView?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <VBox prefHeight="51.0" prefWidth="600.0" BorderPane.alignment="CENTER">
@@ -87,7 +86,7 @@
          </children>
       </HBox>
    </left>
-    <center>
-        <MapView></MapView>
-    </center>
+   <center>
+        <MapView fx:id="map" style="-fx-background-color: #aad3df;" />
+   </center>
 </BorderPane>
