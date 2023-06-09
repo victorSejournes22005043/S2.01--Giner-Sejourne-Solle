@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 public class HelloController implements Initializable {
 
     @FXML
-    public static MapView map = new MapView();
+    public MapView map = new MapView();
 
     @FXML
     public TextField rayon = new TextField();
