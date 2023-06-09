@@ -5,15 +5,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.s201.HelloController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.s201.HelloController">
    <top>
       <VBox prefHeight="51.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
-                  <Button mnemonicParsing="false" text="Carte" />
-                  <Button mnemonicParsing="false" text="Tableau" />
-                  <Button mnemonicParsing="false" text="Graphique" />
+                  <Button mnemonicParsing="false" text="Carte" onAction="#carte"/>
+                  <Button mnemonicParsing="false" text="Tableau" onAction="#tableau"/>
+                  <Button mnemonicParsing="false" text="Graphique" onAction="#graphique"/>
                </children>
                <VBox.margin>
                   <Insets left="10.0" />
@@ -88,6 +88,6 @@
       </HBox>
    </left>
    <center>
-        <MapView fx:id="map" style="-fx-background-color: #aad3df;" />
+       <MapView fx:id="map" style="-fx-background-color: #aad3df;"></MapView>
    </center>
 </BorderPane>
