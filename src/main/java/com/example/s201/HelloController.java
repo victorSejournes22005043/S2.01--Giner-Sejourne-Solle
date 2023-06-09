@@ -16,8 +16,16 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
+
+import java.awt.*;
+import java.io.File;
+import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -47,6 +55,11 @@ public class HelloController implements Initializable {
     public DatePicker debut = new DatePicker();
     @FXML
     public DatePicker fin = new DatePicker();
+
+    public FileChooser fileChooser = new FileChooser();
+
+    public String path;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -105,6 +118,16 @@ public class HelloController implements Initializable {
         }
     }
 
+    @FXML
+    private void openCSV() throws FileNotFoundException {
+        JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showOpenDialog(new JFrame());
 
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            path = selectedFile.getAbsolutePath();
+        }
+        System.out.println(path);
+    }
 
 }

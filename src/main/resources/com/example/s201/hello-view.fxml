@@ -11,9 +11,9 @@
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
-                  <Button mnemonicParsing="false" text="Carte" onAction="#carte"/>
-                  <Button mnemonicParsing="false" text="Tableau" onAction="#tableau"/>
-                  <Button mnemonicParsing="false" text="Graphique" onAction="#graphique"/>
+                  <Button mnemonicParsing="false" onAction="#carte" text="Carte" />
+                  <Button mnemonicParsing="false" onAction="#tableau" text="Tableau" />
+                  <Button mnemonicParsing="false" onAction="#graphique" text="Graphique" />
                </children>
                <VBox.margin>
                   <Insets left="10.0" />
@@ -28,6 +28,7 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="349.0" prefWidth="182.0" spacing="15.0">
                <children>
+                  <Button mnemonicParsing="false" text="open CSV file" onAction="#openCSV"/>
                   <Label text="Zone de recherche " />
                   <GridPane>
                     <columnConstraints>
@@ -73,8 +74,8 @@
                      </VBox.margin>
                   </GridPane>
                   <Separator prefWidth="200.0" />
-                  <Label fx:id="erreur"  textFill="RED" />
-                  <Label fx:id="messageErreur"  textFill="RED" />
+                  <Label fx:id="erreur" textFill="RED" />
+                  <Label fx:id="messageErreur" textFill="RED" />
                   <HBox alignment="CENTER" prefHeight="47.0" prefWidth="182.0" spacing="10.0">
                      <children>
                         <Button mnemonicParsing="false" onAction="#rechercher" text="Rechercher" />
@@ -88,6 +89,6 @@
       </HBox>
    </left>
    <center>
-       <MapView fx:id="map" style="-fx-background-color: #aad3df;"></MapView>
+       <MapView fx:id="map" style="-fx-background-color: #aad3df;" />
    </center>
 </BorderPane>
