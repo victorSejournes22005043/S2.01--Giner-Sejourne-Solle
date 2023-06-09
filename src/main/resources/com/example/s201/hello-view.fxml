@@ -42,9 +42,9 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <TextField GridPane.columnIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="rayon" GridPane.columnIndex="1" />
+                        <TextField fx:id="coordX" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="coordY" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label text="Rayon" />
                         <Label text="Coord X" GridPane.rowIndex="1" />
                         <Label text="Coord Y" GridPane.rowIndex="2" />
@@ -67,8 +67,8 @@
                      <children>
                         <Label text="Debut" />
                         <Label text="Fin" GridPane.rowIndex="1" />
-                        <DatePicker GridPane.columnIndex="1" />
-                        <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <DatePicker fx:id="debut" GridPane.columnIndex="1" />
+                        <DatePicker fx:id="fin" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" />
@@ -79,7 +79,7 @@
                   <HBox alignment="CENTER" prefHeight="47.0" prefWidth="182.0" spacing="10.0">
                      <children>
                         <Button mnemonicParsing="false" text="Rechercher" />
-                        <Button mnemonicParsing="false" text="Vider" />
+                        <Button mnemonicParsing="false" text="Vider" onAction="#vider"/>
                      </children>
                   </HBox>
                </children>
