@@ -5,9 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.s201.HelloController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.s201.HelloController">
    <top>
       <VBox prefHeight="51.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -75,11 +73,12 @@
                      </VBox.margin>
                   </GridPane>
                   <Separator prefWidth="200.0" />
-                  <Label text="Message d'erreur" />
+                  <Label fx:id="erreur"  textFill="RED" />
+                  <Label fx:id="messageErreur"  textFill="RED" />
                   <HBox alignment="CENTER" prefHeight="47.0" prefWidth="182.0" spacing="10.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Rechercher" />
-                        <Button mnemonicParsing="false" text="Vider" onAction="#vider"/>
+                        <Button mnemonicParsing="false" onAction="#rechercher" text="Rechercher" />
+                        <Button mnemonicParsing="false" onAction="#vider" text="Vider" />
                      </children>
                   </HBox>
                </children>

@@ -31,6 +31,11 @@ public class HelloController implements Initializable {
     public TextField coordY = new TextField();
 
     @FXML
+    public Label erreur = new Label();
+    @FXML
+    public Label messageErreur = new Label();
+
+    @FXML
     public DatePicker debut = new DatePicker();
     @FXML
     public DatePicker fin = new DatePicker();
@@ -53,8 +58,30 @@ public class HelloController implements Initializable {
         rayon.clear();
         coordX.clear();
         coordY.clear();
+        erreur.setText("");
+        messageErreur.setText("");
         debut.setValue(null);
         fin.setValue(null);
+    }
+
+    @FXML
+    public void rechercher(){
+        if (!coordX.getText().isEmpty()
+        && !coordY.getText().isEmpty()
+        && !rayon.getText().isEmpty()
+        && !(debut.getValue() == null)
+        && !(fin.getValue() == null)){
+
+            // dans le cas où toutes les valeurs sont non null
+
+        }
+        else {
+
+            // dans le cas où une valeur est null
+
+            erreur.setText("Message d'erreur :");
+            messageErreur.setText("Information vide");
+        }
     }
 
 
