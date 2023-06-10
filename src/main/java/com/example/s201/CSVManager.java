@@ -14,8 +14,8 @@ import java.util.List;
 
 
 public class CSVManager {
+    public static List<List<String>> records = new ArrayList<List<String>>();
     public static void readCSV(){
-        List<List<String>> records = new ArrayList<List<String>>();
         try (CSVReader csvReader = new CSVReader(new FileReader(HelloController.path));) {
             String[] values = null;
             while ((values = csvReader.readNext()) != null) {
@@ -28,11 +28,6 @@ public class CSVManager {
         }
 
         System.out.println(records);
-        /*for(int i = 0; i< records.size(); ++i){
-            for(int j = 0; j< records.size(); ++j){
-                System.out.println(records[i][j]);
-            }
-        }*/
 
     }
 
