@@ -6,6 +6,8 @@ module com.example.demo {
     requires org.kordamp.bootstrapfx.core;
     requires com.gluonhq.maps;
     requires java.desktop;
+    //requires jfxrt;
+    //requires rt;
 
     opens com.example.s201 to javafx.fxml;
     exports com.example.s201;
