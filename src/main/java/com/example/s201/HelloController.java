@@ -58,7 +58,7 @@ public class HelloController implements Initializable {
 
     public FileChooser fileChooser = new FileChooser();
 
-    public String path;
+    public static String path;
 
 
     @Override
@@ -128,6 +128,7 @@ public class HelloController implements Initializable {
             path = selectedFile.getAbsolutePath();
         }
         System.out.println(path);
+        CSVManager.readCSV();
     }
 
 }

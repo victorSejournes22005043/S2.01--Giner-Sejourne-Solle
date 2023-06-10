@@ -6,6 +6,7 @@ module com.example.demo {
     requires org.kordamp.bootstrapfx.core;
     requires com.gluonhq.maps;
     requires java.desktop;
+    requires com.opencsv;
     //requires jfxrt;
     //requires rt;
 
