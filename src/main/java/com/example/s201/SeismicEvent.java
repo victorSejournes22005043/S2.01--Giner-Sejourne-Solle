@@ -2,20 +2,18 @@ package com.example.s201;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class SeismicEvent {
     private String identifiant;
     private Date date;
-    private String heure;
     private String nom;
     private String regionEpicentrale;
-    private String choc;
-    private double xRgf93L93;
-    private double yRgf93L93;
     private double latitudeWGS84;
     private double longitudeWGS84;
-    private int intensiteEpicentrale;
+    private Double intensiteEpicentrale;
     private String qualiteIntensiteEpicentrale;
 
     public String getIdentifiant() {
@@ -31,20 +29,22 @@ public class SeismicEvent {
     }
 
     public void setDate(String dateStr) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-        try {
-            this.date = formatter.parse(dateStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        List<SimpleDateFormat> formatters = new ArrayList<>();
+        formatters.add(new SimpleDateFormat("yyyy/MM/dd"));
+        formatters.add(new SimpleDateFormat("yyyy/MM"));
+        formatters.add(new SimpleDateFormat("yyyy"));
+
+        ParseException lastException = null;
+        for (SimpleDateFormat formatter : formatters) {
+            try {
+                this.date = formatter.parse(dateStr);
+                return; // Si l'analyse réussit, sortir de la fonction
+            } catch (ParseException e) {
+                lastException = e; // Sauvegarder l'exception pour pouvoir la lancer si aucune des dates ne fonctionne
+            }
         }
-    }
-
-    public String getHeure() {
-        return heure;
-    }
-
-    public void setHeure(String heure) {
-        this.heure = heure;
+        // Si aucun des formats de date ne fonctionne, lancer une exception
+        throw new IllegalArgumentException("Couldn't parse date: " + dateStr, lastException);
     }
 
     public String getNom() {
@@ -63,30 +63,6 @@ public class SeismicEvent {
         this.regionEpicentrale = regionEpicentrale;
     }
 
-    public String getChoc() {
-        return choc;
-    }
-
-    public void setChoc(String choc) {
-        this.choc = choc;
-    }
-
-    public double getXRgf93L93() {
-        return xRgf93L93;
-    }
-
-    public void setXRgf93L93(double xRgf93L93) {
-        this.xRgf93L93 = xRgf93L93;
-    }
-
-    public double getYRgf93L93() {
-        return yRgf93L93;
-    }
-
-    public void setYRgf93L93(double yRgf93L93) {
-        this.yRgf93L93 = yRgf93L93;
-    }
-
     public double getLatitudeWGS84() {
         return latitudeWGS84;
     }
@@ -103,11 +79,11 @@ public class SeismicEvent {
         this.longitudeWGS84 = longitudeWGS84;
     }
 
-    public int getIntensiteEpicentrale() {
+    public Double getIntensiteEpicentrale() {
         return intensiteEpicentrale;
     }
 
-    public void setIntensiteEpicentrale(int intensiteEpicentrale) {
+    public void setIntensiteEpicentrale(Double intensiteEpicentrale) {
         this.intensiteEpicentrale = intensiteEpicentrale;
     }
 

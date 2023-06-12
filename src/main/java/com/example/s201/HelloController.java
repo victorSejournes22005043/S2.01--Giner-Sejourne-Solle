@@ -2,13 +2,13 @@ package com.example.s201;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import com.gluonhq.maps.MapPoint;
 import com.gluonhq.maps.MapView;
 import javafx.fxml.Initializable;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -35,6 +35,8 @@ public class HelloController implements Initializable {
 
     @FXML
     public MapView map = new MapView();
+    @FXML
+    public TableView tab = new TableView();
 
     @FXML
     public BorderPane borderPane = new BorderPane();
@@ -64,6 +66,7 @@ public class HelloController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initMap();
+        initTab();
     }
 
     public void initMap(){
@@ -74,13 +77,27 @@ public class HelloController implements Initializable {
         map.flyTo(0, mapPoint, 0.1);
     }
 
+    public void initTab() {
+        TableView<SeismicEvent> table = new TableView<SeismicEvent>();
+
+        TableColumn<SeismicEvent, String> column1 = new TableColumn<SeismicEvent, String>("identifiant");
+        TableColumn<SeismicEvent, String> column2 = new TableColumn<SeismicEvent, String>("date");
+        TableColumn<SeismicEvent, String> column3 = new TableColumn<SeismicEvent, String>("nom");
+        TableColumn<SeismicEvent, String> column4 = new TableColumn<SeismicEvent, String>("regionEpicentrale");
+        TableColumn<SeismicEvent, String> column5 = new TableColumn<SeismicEvent, String>("latitudeWGS84");
+        TableColumn<SeismicEvent, String> column6 = new TableColumn<SeismicEvent, String>("longitudeWGS84");
+        TableColumn<SeismicEvent, String> column7 = new TableColumn<SeismicEvent, String>("intensiteEpicentrale");
+        TableColumn<SeismicEvent, String> column8 = new TableColumn<SeismicEvent, String>("qualiteIntensiteEpicentrale");
+        tab.getColumns().addAll(column1, column2, column3, column4, column5, column6, column7, column8);
+    }
+
     @FXML
     public void carte(){
         borderPane.setCenter(map);
     }
     @FXML
     public void tableau(){
-        borderPane.setCenter(null);
+        borderPane.setCenter(tab);
     }
     @FXML
     public void graphique(){
