@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
@@ -62,6 +63,15 @@ public class HelloController implements Initializable {
 
     public static String path;
 
+    public static TableColumn<SeismicEvent, String> column1 = new TableColumn<SeismicEvent, String>("identifiant");
+    public static TableColumn<SeismicEvent, String> column2 = new TableColumn<SeismicEvent, String>("date");
+    public static TableColumn<SeismicEvent, String> column3 = new TableColumn<SeismicEvent, String>("nom");
+    public static TableColumn<SeismicEvent, String> column4 = new TableColumn<SeismicEvent, String>("region");
+    public static TableColumn<SeismicEvent, String> column5 = new TableColumn<SeismicEvent, String>("latitude");
+    public static TableColumn<SeismicEvent, String> column6 = new TableColumn<SeismicEvent, String>("longitude");
+    public static TableColumn<SeismicEvent, String> column7 = new TableColumn<SeismicEvent, String>("intensite");
+    public static TableColumn<SeismicEvent, String> column8 = new TableColumn<SeismicEvent, String>("qualiteIntensiteEpicentrale");
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -80,15 +90,31 @@ public class HelloController implements Initializable {
     public void initTab() {
         TableView<SeismicEvent> table = new TableView<SeismicEvent>();
 
-        TableColumn<SeismicEvent, String> column1 = new TableColumn<SeismicEvent, String>("identifiant");
-        TableColumn<SeismicEvent, String> column2 = new TableColumn<SeismicEvent, String>("date");
-        TableColumn<SeismicEvent, String> column3 = new TableColumn<SeismicEvent, String>("nom");
-        TableColumn<SeismicEvent, String> column4 = new TableColumn<SeismicEvent, String>("regionEpicentrale");
-        TableColumn<SeismicEvent, String> column5 = new TableColumn<SeismicEvent, String>("latitudeWGS84");
-        TableColumn<SeismicEvent, String> column6 = new TableColumn<SeismicEvent, String>("longitudeWGS84");
-        TableColumn<SeismicEvent, String> column7 = new TableColumn<SeismicEvent, String>("intensiteEpicentrale");
-        TableColumn<SeismicEvent, String> column8 = new TableColumn<SeismicEvent, String>("qualiteIntensiteEpicentrale");
+        column1.setMinWidth(111);
+        column2.setMinWidth(111);
+        column3.setMinWidth(111);
+        column4.setMinWidth(111);
+        column5.setMinWidth(111);
+        column6.setMinWidth(111);
+        column7.setMinWidth(111);
+        column8.setMinWidth(111);
+
         tab.getColumns().addAll(column1, column2, column3, column4, column5, column6, column7, column8);
+    }
+
+    public void editTab(){
+        column1.setCellValueFactory(new PropertyValueFactory<>("identifiant"));
+        column2.setCellValueFactory(new PropertyValueFactory<>("date"));
+        column3.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        column4.setCellValueFactory(new PropertyValueFactory<>("regionEpicentrale"));
+        column5.setCellValueFactory(new PropertyValueFactory<>("latitudeWGS84"));
+        column6.setCellValueFactory(new PropertyValueFactory<>("longitudeWGS84"));
+        column7.setCellValueFactory(new PropertyValueFactory<>("intensiteEpicentrale"));
+        column8.setCellValueFactory(new PropertyValueFactory<>("qualiteIntensiteEpicentrale"));
+
+        for(int i = 0; i<CSVManager.eventArr.size(); ++i){
+            tab.getItems().add(CSVManager.eventArr.get(i));
+        }
     }
 
     @FXML
@@ -146,6 +172,7 @@ public class HelloController implements Initializable {
         }
         System.out.println(path);
         CSVManager.readCSV();
+        editTab();
     }
 
 }
