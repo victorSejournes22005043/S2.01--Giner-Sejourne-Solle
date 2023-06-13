@@ -2,6 +2,7 @@ package com.example.s201;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import com.gluonhq.maps.MapPoint;
 import com.gluonhq.maps.MapView;
@@ -27,7 +28,11 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.List;
+
 
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
 
@@ -62,7 +67,15 @@ public class HelloController implements Initializable {
 
     public static String path;
 
+    private void updateTable() {
+        // Supprime toutes les données précédentes
+        tab.getItems().clear();
 
+        // Ajoute les nouvelles données
+        for (SeismicEvent event : CSVManager.eventArr) {
+            tab.getItems().add(event);
+        }
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initMap();
@@ -101,7 +114,14 @@ public class HelloController implements Initializable {
     }
     @FXML
     public void graphique(){
-        borderPane.setCenter(null);
+        updateChart();
+    }
+
+    private void updateChart() {
+        List<SeismicEvent> events = CSVManager.eventArr;
+        Map<String, Integer> counts = countEventsPerYear(events);
+        BarChart<String, Number> chart = createChart(counts);
+        borderPane.setCenter(chart);
     }
 
     @FXML
@@ -114,26 +134,85 @@ public class HelloController implements Initializable {
         debut.setValue(null);
         fin.setValue(null);
     }
+    private List<SeismicEvent> filterEventsByCoordinatesAndRadius(List<SeismicEvent> events, double lat, double lon, double radius) {
+        List<SeismicEvent> filteredEvents = new ArrayList<>();
 
+        for (SeismicEvent event : events) {
+            double distance = calculateDistance(lat, lon, event.getLatitudeWGS84(), event.getLongitudeWGS84());
+
+            if (distance <= radius) {
+                filteredEvents.add(event);
+            }
+        }
+
+        return filteredEvents;
+    }
+    private List<SeismicEvent> filterEventsByDate(List<SeismicEvent> events, Date startDate, Date endDate) {
+        List<SeismicEvent> filteredEvents = new ArrayList<>();
+
+        for (SeismicEvent event : events) {
+            if (event.getDate().after(startDate) && event.getDate().before(endDate)) {
+                filteredEvents.add(event);
+            }
+        }
+
+        return filteredEvents;
+    }
+    //...
     @FXML
     public void rechercher(){
-        if (!coordX.getText().isEmpty()
-        && !coordY.getText().isEmpty()
-        && !rayon.getText().isEmpty()
-        && !(debut.getValue() == null)
-        && !(fin.getValue() == null)){
+        // Reset l'erreur avant une nouvelle recherche
+        erreur.setText("");
+        messageErreur.setText("");
 
-            // dans le cas où toutes les valeurs sont non null
+        // Restaure les données à leur état original
+        CSVManager.eventArr = new ArrayList<>(CSVManager.originalEvents);
 
+        // Le reste de votre logique de recherche...
+
+        List<SeismicEvent> filteredEvents = new ArrayList<>(CSVManager.eventArr);
+
+        // Recherche par coordonnées et rayon si renseignés
+        if (!coordX.getText().isEmpty() && !coordY.getText().isEmpty() && !rayon.getText().isEmpty()) {
+            double lat = Double.parseDouble(coordX.getText());
+            double lon = Double.parseDouble(coordY.getText());
+            double radius = Double.parseDouble(rayon.getText());
+            filteredEvents = filterEventsByCoordinatesAndRadius(filteredEvents, lat, lon, radius);
         }
-        else {
 
-            // dans le cas où une valeur est null
+        // Recherche par date si renseignées
+        // Recherche par date si renseignées
+        if (debut.getValue() != null && fin.getValue() != null) {
+            // Conversion des valeurs de DatePicker en java.util.Date
+            Date startDate = java.util.Date.from(debut.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date endDate = java.util.Date.from(fin.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
+            // Vérifier si la date de début est avant la date de fin
+            if (startDate.after(endDate)) {
+                erreur.setText("Message d'erreur :");
+                messageErreur.setText("La date de début doit être avant la date de fin");
+                return;  // Si la date de début est après la date de fin, on quitte la méthode
+            } else {
+                filteredEvents = filterEventsByDate(filteredEvents, startDate, endDate);
+            }
+        }
+        // Si aucune recherche n'a été effectuée
+        if (coordX.getText().isEmpty() && coordY.getText().isEmpty() && rayon.getText().isEmpty() && debut.getValue() == null && fin.getValue() == null) {
             erreur.setText("Message d'erreur :");
-            messageErreur.setText("Information vide");
+            messageErreur.setText("Aucun critère de recherche renseigné");
+        } else {
+            CSVManager.setEvents(filteredEvents); // utilisez la méthode définie précédemment
+
+            if (borderPane.getCenter() instanceof BarChart) {
+                updateChart();
+            } else if (borderPane.getCenter() instanceof TableView) {
+                updateTable();
+            }
+
         }
+
     }
+
 
     @FXML
     private void openCSV() throws FileNotFoundException {
@@ -146,6 +225,68 @@ public class HelloController implements Initializable {
         }
         System.out.println(path);
         CSVManager.readCSV();
+
+        CSVManager.originalEvents = new ArrayList<>(CSVManager.eventArr);  // Faites une copie des données initiales
+
+        // Ajoutez ce code pour mettre à jour le graphique :
+        if (borderPane.getCenter() instanceof BarChart) {
+            updateChart();
+        }
+
     }
 
+
+    private Map<String, Integer> countEventsPerYear(List<SeismicEvent> events) {
+        Map<String, Integer> counts = new TreeMap<>();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+
+        for (SeismicEvent event : events) {
+            String year = formatter.format(event.getDate());
+            counts.put(year, counts.getOrDefault(year, 0) + 1);
+        }
+
+        return counts;
+    }
+    public BarChart<String, Number> createChart(Map<String, Integer> counts) {
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Année");
+        yAxis.setLabel("Nombre de séismes");
+
+        final BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        for (Map.Entry<String, Integer> entry : counts.entrySet()) {
+            series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+        }
+
+        barChart.getData().add(series);
+
+        return barChart;
+    }
+    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        int R = 6371; // Radius of the earth in km
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c; // convert to kilometers
+
+        return distance;
+    }
+    private List<SeismicEvent> filterEvents(List<SeismicEvent> events, double lat, double lon, double radius, Date startDate, Date endDate) {
+        List<SeismicEvent> filteredEvents = new ArrayList<>();
+
+        for (SeismicEvent event : events) {
+            double distance = calculateDistance(lat, lon, event.getLatitudeWGS84(), event.getLongitudeWGS84());
+
+            if (distance <= radius && event.getDate().after(startDate) && event.getDate().before(endDate)) {
+                filteredEvents.add(event);
+            }
+        }
+
+        return filteredEvents;
+    }
 }
