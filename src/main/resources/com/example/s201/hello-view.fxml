@@ -28,7 +28,7 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="349.0" prefWidth="182.0" spacing="15.0">
                <children>
-                  <Button mnemonicParsing="false" text="open CSV file" onAction="#openCSV"/>
+                  <Button mnemonicParsing="false" onAction="#openCSV" text="open CSV file" />
                   <Label text="Zone de recherche " />
                   <GridPane>
                     <columnConstraints>
@@ -52,6 +52,7 @@
                         <Insets left="10.0" right="10.0" />
                      </VBox.margin>
                   </GridPane>
+                  <Label text="cliquez sur la carte " />
                   <Separator prefWidth="200.0" />
                   <Label text="Date" />
                   <GridPane alignment="CENTER">
@@ -83,9 +84,15 @@
                      </children>
                   </HBox>
                </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
             </VBox>
             <Separator orientation="VERTICAL" prefHeight="200.0" />
          </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
       </HBox>
    </left>
    <center>

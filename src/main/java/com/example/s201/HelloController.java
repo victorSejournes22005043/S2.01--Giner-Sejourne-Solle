@@ -1,36 +1,25 @@
 package com.example.s201;
 
+import com.gluonhq.maps.MapLayer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import com.gluonhq.maps.MapPoint;
 import com.gluonhq.maps.MapView;
-import javafx.fxml.Initializable;
-import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 
-import java.awt.*;
 import java.io.File;
 import javax.swing.*;
-import javax.swing.filechooser.FileSystemView;
-import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
 
 public class HelloController implements Initializable {
 
@@ -80,11 +69,24 @@ public class HelloController implements Initializable {
     }
 
     public void initMap(){
-        map.addEventFilter(MouseEvent.ANY, event -> event.consume());
+        map.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> event.consume());
         map.addEventFilter(ScrollEvent.ANY, event -> event.consume());
         MapPoint mapPoint = new MapPoint(46.727638, 2.213749);
-        map.setZoom(5.1);
+        setPoint(mapPoint);
+        map.setZoom(5.5);
         map.flyTo(0, mapPoint, 0.1);
+        map.setOnMouseClicked(event -> {
+            MapPoint pos = map.getMapPosition(event.getX(),event.getY());
+            setPoint(pos);
+            coordX.setText(String.valueOf(pos.getLatitude()));
+            coordY.setText(String.valueOf(pos.getLongitude()));
+                }
+        );
+    }
+
+    public void setPoint(MapPoint point){
+        MapLayer layer = new CustomCircleMarkerLayer(point);
+        map.addLayer(layer);
     }
 
     public void initTab() {
