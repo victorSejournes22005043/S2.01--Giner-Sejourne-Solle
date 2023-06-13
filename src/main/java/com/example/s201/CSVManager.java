@@ -22,6 +22,7 @@ import java.util.Date;
 
 public class CSVManager {
     public static List<List<String>> records = new ArrayList<List<String>>();
+    public static ArrayList<SeismicEvent> eventArr = new ArrayList<SeismicEvent>();
     public static void readCSV(){
         try (CSVReader csvReader = new CSVReader(new FileReader(HelloController.path));) {
             String[] values = null;
@@ -34,7 +35,6 @@ public class CSVManager {
             throw new RuntimeException(e);
         }
 
-        ArrayList<SeismicEvent> eventArr = new ArrayList<SeismicEvent>();
         for(int i = 1; i< records.size(); ++i){
             eventArr.add(new SeismicEvent());
             eventArr.get(i-1).setDate(records.get(i).get(1));
