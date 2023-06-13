@@ -150,7 +150,8 @@ public class HelloController implements Initializable {
         && !(fin.getValue() == null)){
 
             // dans le cas où toutes les valeurs sont non null
-
+            CSVManager.updateCSV(Double.parseDouble(coordX.getText()), Double.parseDouble(coordY.getText()), Double.parseDouble(rayon.getText()));
+            editTab();
         }
         else {
 
