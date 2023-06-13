@@ -236,19 +236,19 @@ public class HelloController implements Initializable {
         messageErreur.setText("");
 
         // Restaure les données à leur état original
-        CSVManager.eventArr = new ArrayList<>(CSVManager.originalEvents);
+        //CSVManager.eventArr = new ArrayList<>(CSVManager.originalEvents);
 
         // Le reste de votre logique de recherche...
 
         List<SeismicEvent> filteredEvents = new ArrayList<>(CSVManager.eventArr);
 
         // Recherche par coordonnées et rayon si renseignés
-        if (!coordX.getText().isEmpty() && !coordY.getText().isEmpty() && !rayon.getText().isEmpty()) {
+        /*if (!coordX.getText().isEmpty() && !coordY.getText().isEmpty() && !rayon.getText().isEmpty()) {
             double lat = Double.parseDouble(coordX.getText());
             double lon = Double.parseDouble(coordY.getText());
             double radius = Double.parseDouble(rayon.getText());
             filteredEvents = filterEventsByCoordinatesAndRadius(filteredEvents, lat, lon, radius);
-        }
+        }*/
 
         // Recherche par date si renseignées
         if (debut.getValue() != null && fin.getValue() != null) {
@@ -275,6 +275,7 @@ public class HelloController implements Initializable {
         } else if (borderPane.getCenter() instanceof BarChart) {
             updateChart();
         }
+        //CSVManager.updateCSV(Double.parseDouble(coordX.getText()), Double.parseDouble(coordY.getText()), Double.parseDouble(rayon.getText()));
     }
     private void updateChart() {
         List<SeismicEvent> events = CSVManager.eventArr;
