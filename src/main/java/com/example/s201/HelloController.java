@@ -56,6 +56,16 @@ public class HelloController implements Initializable {
 
     public static String path;
 
+    public static TableColumn<SeismicEvent, String> column1 = new TableColumn<SeismicEvent, String>("identifiant");
+    public static TableColumn<SeismicEvent, String> column2 = new TableColumn<SeismicEvent, String>("date");
+    public static TableColumn<SeismicEvent, String> column3 = new TableColumn<SeismicEvent, String>("nom");
+    public static TableColumn<SeismicEvent, String> column4 = new TableColumn<SeismicEvent, String>("region");
+    public static TableColumn<SeismicEvent, String> column5 = new TableColumn<SeismicEvent, String>("latitude");
+    public static TableColumn<SeismicEvent, String> column6 = new TableColumn<SeismicEvent, String>("longitude");
+    public static TableColumn<SeismicEvent, String> column7 = new TableColumn<SeismicEvent, String>("intensite");
+    public static TableColumn<SeismicEvent, String> column8 = new TableColumn<SeismicEvent, String>("qualiteIntensiteEpicentrale");
+
+
     private void updateTable() {
         // Supprime toutes les données précédentes
         tab.getItems().clear();
@@ -81,14 +91,21 @@ public class HelloController implements Initializable {
     }
 
     public void initTab() {
-        TableColumn<SeismicEvent, String> column1 = new TableColumn<>("identifiant");
-        TableColumn<SeismicEvent, String> column2 = new TableColumn<>("date");
-        TableColumn<SeismicEvent, String> column3 = new TableColumn<>("nom");
-        TableColumn<SeismicEvent, String> column4 = new TableColumn<>("regionEpicentrale");
-        TableColumn<SeismicEvent, String> column5 = new TableColumn<>("latitudeWGS84");
-        TableColumn<SeismicEvent, String> column6 = new TableColumn<>("longitudeWGS84");
-        TableColumn<SeismicEvent, String> column7 = new TableColumn<>("intensiteEpicentrale");
-        TableColumn<SeismicEvent, String> column8 = new TableColumn<>("qualiteIntensiteEpicentrale");
+        TableView<SeismicEvent> table = new TableView<SeismicEvent>();
+
+        column1.setMinWidth(111);
+        column2.setMinWidth(111);
+        column3.setMinWidth(111);
+        column4.setMinWidth(111);
+        column5.setMinWidth(111);
+        column6.setMinWidth(111);
+        column7.setMinWidth(111);
+        column8.setMinWidth(111);
+
+        tab.getColumns().addAll(column1, column2, column3, column4, column5, column6, column7, column8);
+    }
+
+    public void editTab(){
         column1.setCellValueFactory(new PropertyValueFactory<>("identifiant"));
         column2.setCellValueFactory(new PropertyValueFactory<>("date"));
         column3.setCellValueFactory(new PropertyValueFactory<>("nom"));
@@ -97,7 +114,9 @@ public class HelloController implements Initializable {
         column6.setCellValueFactory(new PropertyValueFactory<>("longitudeWGS84"));
         column7.setCellValueFactory(new PropertyValueFactory<>("intensiteEpicentrale"));
         column8.setCellValueFactory(new PropertyValueFactory<>("qualiteIntensiteEpicentrale"));
-        tab.getColumns().addAll(column1, column2, column3, column4, column5, column6, column7, column8);
+        for(int i = 0; i<CSVManager.eventArr.size(); ++i){
+            tab.getItems().add(CSVManager.eventArr.get(i));
+        }
     }
 
     @FXML
@@ -315,6 +334,7 @@ public class HelloController implements Initializable {
         }
         System.out.println(path);
         CSVManager.readCSV();
+        editTab();
 
         CSVManager.originalEvents = new ArrayList<>(CSVManager.eventArr);  // Faites une copie des données initiales
 

@@ -43,6 +43,7 @@ public class CSVManager {
 
         for(int i = 1; i< records.size(); ++i){
             eventArr.add(new SeismicEvent());
+            eventArr.get(i-1).setIdentifiant(records.get(i).get(0));
             eventArr.get(i-1).setDate(records.get(i).get(1));
             eventArr.get(i-1).setNom(records.get(i).get(3));
             eventArr.get(i-1).setRegionEpicentrale(records.get(i).get(4));

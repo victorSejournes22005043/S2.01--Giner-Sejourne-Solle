@@ -94,4 +94,9 @@ public class SeismicEvent {
     public void setQualiteIntensiteEpicentrale(String qualiteIntensiteEpicentrale) {
         this.qualiteIntensiteEpicentrale = qualiteIntensiteEpicentrale;
     }
+
+    @Override
+    public String toString() {
+        return "["+ identifiant +"]";
+    }
 }
