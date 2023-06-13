@@ -1,7 +1,4 @@
 package com.example.s201;
-import com.example.s201.CSVManager;
-import com.example.s201.SeismicEvent;
-import com.gluonhq.maps.MapLayer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
@@ -13,10 +10,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
 
 import javax.swing.*;
 import java.io.File;
@@ -26,7 +21,7 @@ import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.*;
 
-public class HelloController implements Initializable {
+public class SisutController implements Initializable {
 
     @FXML
     public MapView map = new MapView();
@@ -52,8 +47,6 @@ public class HelloController implements Initializable {
     public DatePicker debut = new DatePicker();
     @FXML
     public DatePicker fin = new DatePicker();
-
-    public FileChooser fileChooser = new FileChooser();
 
     public CustomCircleMarkerLayer layer = new CustomCircleMarkerLayer();
 
@@ -132,7 +125,7 @@ public class HelloController implements Initializable {
     }
 
     public void initTab() {
-        TableView<SeismicEvent> table = new TableView<SeismicEvent>();
+        //TableView<SeismicEvent> table = new TableView<SeismicEvent>();
 
         column1.setMinWidth(111);
         column2.setMinWidth(111);
@@ -277,19 +270,11 @@ public class HelloController implements Initializable {
         messageErreur.setText("");
 
         // Restaure les données à leur état original
-        //CSVManager.eventArr = new ArrayList<>(CSVManager.originalEvents);
+        CSVManager.eventArr = new ArrayList<>(CSVManager.originalEvents);
 
         // Le reste de votre logique de recherche...
 
         List<SeismicEvent> filteredEvents = new ArrayList<>(CSVManager.eventArr);
-
-        // Recherche par coordonnées et rayon si renseignés
-        /*if (!coordX.getText().isEmpty() && !coordY.getText().isEmpty() && !rayon.getText().isEmpty()) {
-            double lat = Double.parseDouble(coordX.getText());
-            double lon = Double.parseDouble(coordY.getText());
-            double radius = Double.parseDouble(rayon.getText());
-            filteredEvents = filterEventsByCoordinatesAndRadius(filteredEvents, lat, lon, radius);
-        }*/
 
         // Recherche par date si renseignées
         if (debut.getValue() != null && fin.getValue() != null) {
@@ -300,7 +285,7 @@ public class HelloController implements Initializable {
             // Vérifier si la date de début est avant la date de fin
             if (startDate.after(endDate)) {
                 erreur.setText("Message d'erreur :");
-                messageErreur.setText("La date de début doit être avant la date de fin");
+                messageErreur.setText("Erreur de date");
                 return;  // Si la date de début est après la date de fin, on quitte la méthode
             } else {
                 filteredEvents = filterEventsByDate(filteredEvents, startDate, endDate);
@@ -314,8 +299,6 @@ public class HelloController implements Initializable {
         // Actualiser l'affichage en fonction du composant actuellement affiché dans le borderPane
         updateTable();
         updateChart();
-        //CSVManager.updateCSV(Double.parseDouble(coordX.getText()), Double.parseDouble(coordY.getText()), Double.parseDouble(rayon.getText()));
-
     }
     private void updateChart() {
         List<SeismicEvent> events = CSVManager.eventArr;
