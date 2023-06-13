@@ -1,6 +1,7 @@
 package com.example.s201;
 import com.example.s201.CSVManager;
 import com.example.s201.SeismicEvent;
+import com.gluonhq.maps.MapLayer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
@@ -54,6 +55,10 @@ public class HelloController implements Initializable {
 
     public FileChooser fileChooser = new FileChooser();
 
+    public CustomCircleMarkerLayer layer = new CustomCircleMarkerLayer();
+
+    public GridPane graph = new GridPane();
+
     public static String path;
 
     public static TableColumn<SeismicEvent, String> column1 = new TableColumn<SeismicEvent, String>("identifiant");
@@ -83,11 +88,47 @@ public class HelloController implements Initializable {
     }
 
     public void initMap() {
-        map.addEventFilter(MouseEvent.ANY, event -> event.consume());
+        map.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> event.consume());
         map.addEventFilter(ScrollEvent.ANY, event -> event.consume());
+        map.addLayer(layer);
         MapPoint mapPoint = new MapPoint(46.727638, 2.213749);
         map.setZoom(5.1);
         map.flyTo(0, mapPoint, 0.1);
+        map.setOnMouseClicked(event -> {
+                    MapPoint pos = map.getMapPosition(event.getX(),event.getY());
+                    coordX.setText(String.valueOf(pos.getLatitude()));
+                    coordY.setText(String.valueOf(pos.getLongitude()));
+                }
+        );
+    }
+
+    public void dessinerMap(){
+        layer.reset();
+        for(int i = 0; i<CSVManager.eventArr.size(); ++i){
+
+                Color color;
+                double taille;
+                double intensite = CSVManager.eventArr.get(i).getIntensiteEpicentrale();
+                if (intensite <= 2.5) {
+                    color = Color.YELLOWGREEN;
+                    taille = 2;
+                } else if (intensite <= 5) {
+                    color = Color.YELLOW;
+                    taille = 3;
+                } else if (intensite <= 7.5) {
+                    color = Color.ORANGE;
+                    taille = 4;
+                } else {
+                    color = Color.RED;
+                    taille = 5;
+                }
+                layer.addPoint(new MapPoint(
+                        CSVManager.eventArr.get(i).getLatitudeWGS84(),
+                        CSVManager.eventArr.get(i).getLongitudeWGS84()
+                ), color, taille);
+
+        }
+        layer.layoutLayer();
     }
 
     public void initTab() {
@@ -131,7 +172,7 @@ public class HelloController implements Initializable {
 
     @FXML
     public void graphique() {
-        updateChart();
+        borderPane.setCenter(graph);
     }
 
     private Map<String, Integer> countEventsPerDate(List<SeismicEvent> events) {
@@ -264,18 +305,17 @@ public class HelloController implements Initializable {
             } else {
                 filteredEvents = filterEventsByDate(filteredEvents, startDate, endDate);
             }
+
         }
 
         // Actualiser les données dans CSVManager avec les événements filtrés
         CSVManager.setEvents(filteredEvents);
 
         // Actualiser l'affichage en fonction du composant actuellement affiché dans le borderPane
-        if (borderPane.getCenter() instanceof TableView) {
-            updateTable();
-        } else if (borderPane.getCenter() instanceof BarChart) {
-            updateChart();
-        }
+        updateTable();
+        updateChart();
         //CSVManager.updateCSV(Double.parseDouble(coordX.getText()), Double.parseDouble(coordY.getText()), Double.parseDouble(rayon.getText()));
+
     }
     private void updateChart() {
         List<SeismicEvent> events = CSVManager.eventArr;
@@ -304,7 +344,7 @@ public class HelloController implements Initializable {
         // Ajoutez le graphique bâton
         gridPane.add(chart, 1, 0, 1, 2);  // Graphique bâton dans la deuxième colonne, occupe deux lignes
 
-        borderPane.setCenter(gridPane);
+        graph = gridPane;
     }
 
 
@@ -336,13 +376,11 @@ public class HelloController implements Initializable {
         System.out.println(path);
         CSVManager.readCSV();
         editTab();
+        dessinerMap();
+        updateChart();
 
         CSVManager.originalEvents = new ArrayList<>(CSVManager.eventArr);  // Faites une copie des données initiales
 
-        // Ajoutez ce code pour mettre à jour le graphique :
-        if (borderPane.getCenter() instanceof BarChart) {
-            updateChart();
-        }
 
     }
 
